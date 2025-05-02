@@ -24,8 +24,8 @@ int Train::getOpCount() {
 
 int Train::getLength() {
     if (!first) return 0;
-    countOp = 0;
 
+    countOp = 0;
     Car* current = first;
     int length = 1;
 
@@ -34,6 +34,26 @@ int Train::getLength() {
         length++;
         countOp++;
     }
+
+    const Car* marker = first;
+    while (true) {
+        current = marker;
+        int steps = 0;
+
+        while (!current->light && steps < length) {
+            current = current->next;
+            steps++;
+            countOp++;
+        }
+
+        if (current->light) break;
+
+        marker = current;
+        marker->light = true;
+    }
+
+    current->light = false;
+    countOp++;
 
     return length;
 }
