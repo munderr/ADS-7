@@ -23,29 +23,13 @@ int Train::getOpCount() {
 }
 
 int Train::getLength() {
-    int k = 1;
+    int steps = 0;
     Car* current = first;
-
-    if (!current->light) current->light = true;
-
-    while (true) {
-        Car* temp = current;
-        for (int i = 0; i < k; ++i) {
-            temp = temp->next;
-            countOp++;
-        }
-
-        if (temp->light) {
-            return k;
-        } else {
-            temp->light = true;
-            for (int i = 0; i < k; ++i) {
-                temp = temp->prev;
-                countOp++;
-            }
-            k++;
-        }
-    }
+    do {
+        steps++;
+        current = current->next;
+    } while (!current->light && current != first);
+    return steps;
 }
 
 void Train::resetOpCount() {
