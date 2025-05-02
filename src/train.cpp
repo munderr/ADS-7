@@ -1,4 +1,3 @@
-// Copyright 2022 NNTU-CS
 #include "train.h"
 #include <cstdlib>
 
@@ -32,11 +31,9 @@ int Train::getLength() {
     countOp = 0;
 
     do {
-        if (!current->light) {
-            current->light = true;
+        if (current->light) {
             countOp++;
         }
-
         current = current->next;
         length++;
     } while (current != first);
