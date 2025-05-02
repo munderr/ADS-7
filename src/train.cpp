@@ -47,3 +47,7 @@ int Train::getLength() {
         }
     }
 }
+
+void Train::resetOpCount() {
+    countOp = 0;
+}
