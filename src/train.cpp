@@ -42,6 +42,6 @@ int Train::getLength() {
     return length;
 }
 
-void Train::resetOpCount() {
-    countOp = 0;
+int Train::getOpCount() {
+    return countOp;
 }
