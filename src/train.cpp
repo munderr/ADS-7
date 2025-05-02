@@ -35,7 +35,7 @@ int Train::getLength() {
         countOp++;
     }
 
-    const Car* marker = first;
+    Car* marker = first;
     while (true) {
         current = marker;
         int steps = 0;
