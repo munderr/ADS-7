@@ -1,3 +1,4 @@
+// Copyright 2022 NNTU-CS
 #include "train.h"
 #include <cstdlib>
 
@@ -55,6 +56,10 @@ int Train::getLength() {
     countOp++;
 
     return length;
+}
+
+void Train::resetOpCount() {
+    countOp = 0;
 }
 
 void Train::resetOpCount() {
