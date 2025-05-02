@@ -24,21 +24,49 @@ int Train::getOpCount() {
 int Train::getLength() {
     if (!first) return 0;
     countOp = 0;
+
     Car* current = first;
-    current->light = true;
     countOp++;
-    int steps = 0;
-    current = current->next;
-    steps++;
-    while (!current->light) {
+
+    int power = 1;
+    int count = 0;
+    Car* marker = current;
+    marker->light = true;
+    countOp++;
+
+    while (true) {
+        current = marker;
+        count = 0;
         countOp++;
-        current = current->next;
-        steps++;
+
+        while (!current->light && count < power) {
+            current = current->next;
+            count++;
+            countOp++;
+        }
+
+        if (current->light) break;
+
+        power *= 2;
+        marker = current;
+        marker->light = true;
+        countOp++;
     }
-    countOp++;
+
     current->light = false;
     countOp++;
-    return steps;
+
+    int length = 1;
+    Car* runner = current->next;
+    countOp++;
+
+    while (runner != current) {
+        runner = runner->next;
+        length++;
+        countOp++;
+    }
+
+    return length;
 }
 
 void Train::resetOpCount() {
