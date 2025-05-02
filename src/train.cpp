@@ -26,7 +26,7 @@ int Train::getLength() {
         return 0;
     }
 
-    int k = 1;
+    int length = 1;
     Car* current = first;
     countOp = 0;
 
@@ -37,23 +37,27 @@ int Train::getLength() {
 
     while (true) {
         Car* temp = current;
-        for (int i = 0; i < k; ++i) {
+        for (int i = 0; i < length; ++i) {
             temp = temp->next;
             countOp++;
         }
 
         if (temp->light) {
-            return k;
+            return length;
         } else {
             temp->light = true;
             countOp++;
 
-            for (int i = 0; i < k; ++i) {
+            for (int i = 0; i < length; ++i) {
                 temp = temp->prev;
                 countOp++;
             }
 
-            k++;
+            length++;
         }
     }
+}
+
+void Train::resetOpCount() {
+    countOp = 0;
 }
