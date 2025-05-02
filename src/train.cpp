@@ -1,3 +1,4 @@
+// Copyright 2022 NNTU-CS
 #include "train.h"
 #include <cstdlib>
 
@@ -26,22 +27,38 @@ int Train::getLength() {
         return 0;
     }
 
-    int length = 0;
+    int k = 1;
     Car* current = first;
     countOp = 0;
 
-    do {
-        length++;
-        if (!current->light) {
-            current->light = true;
+    if (!current->light) {
+        current->light = true;
+        countOp++;
+    }
+
+    while (true) {
+        Car* temp = current;
+        for (int i = 0; i < k; ++i) {
+            temp = temp->next;
             countOp++;
         }
-        current = current->next;
-    } while (current != first);
 
-    return length;
+        if (temp->light) {
+            return k;
+        } else {
+            temp->light = true;
+            countOp++;
+
+            for (int i = 0; i < k; ++i) {
+                temp = temp->prev;
+                countOp++;
+            }
+
+            k++;
+        }
+    }
 }
 
-int Train::getOpCount() {
-    return countOp;
+void Train::resetOpCount() {
+    countOp = 0;
 }
