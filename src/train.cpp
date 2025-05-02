@@ -2,60 +2,97 @@
 #include "train.h"
 #include <cstdlib>
 
-Train::Train() : first(nullptr), countOp(0) {}
+Train::Train() : countOp(0), head(nullptr) {}
 
-void Train::addCar(bool light) {
-    Car* newCar = new Car{light, nullptr, nullptr};
-    if (!first) {
-        newCar->next = newCar->prev = newCar;
-        first = newCar;
-    } else {
-        Car* last = first->prev;
-        last->next = newCar;
-        newCar->prev = last;
-        newCar->next = first;
-        first->prev = newCar;
-    }
-}
+void Train::addCar(bool lightOn) {
+  Car* newCar = new Car{lightOn, nullptr, nullptr};
 
-int Train::getOpCount() {
-    return countOp;
+  if (!head) {
+    head = newCar;
+    newCar->next = newCar;
+    newCar->prev = newCar;
+  } else {
+    Car* tail = head->prev;
+    newCar->next = head;
+    newCar->prev = tail;
+    tail->next = newCar;
+    head->prev = newCar;
+    head = newCar;
+  }
 }
 
 int Train::getLength() {
-    if (!first) return 0;
+  if (!head) return 0;
+  if (head->next == head) return 1;
 
-    countOp = 0;
-    Car* ptr = first;
+  countOp = 0;
+  Car* walker = head;
+  int size = 1;
 
-    while (true) {
-        if (!ptr->light) {
-            ptr->light = true;
-            countOp++;
-            ptr = ptr->next;
-            countOp++;
-        } else {
-            ptr->light = false;
-            countOp++;
-            break;
-        }
+  if (!walker->light) {
+    walker->light = true;
+  }
+
+  walker = walker->next;
+  countOp += 2;
+
+  while (!walker->light) {
+    walker = walker->next;
+    countOp += 2;
+    size++;
+  }
+
+  walker->light = false;
+
+  if (!head->light) {
+    return size;
+  }
+
+  while (true) {
+    walker = head;
+    size = 1;
+
+    if (!walker->light) {
+      walker->light = true;
     }
 
-    int length = 1;
-    ptr = ptr->next;
-    countOp++;
-    while (!ptr->light) {
-        ptr = ptr->next;
-        length++;
-        countOp++;
+    walker = walker->next;
+    countOp += 2;
+
+    while (!walker->light) {
+      walker = walker->next;
+      countOp += 2;
+      size++;
     }
 
-    ptr->light = false;
-    countOp++;
+    walker->light = false;
 
-    return length;
+    if (!head->light) {
+      return size;
+    }
+  }
 }
 
-void Train::resetOpCount() {
-    countOp = 0;
+int Train::getOpCount() {
+  return countOp;
+}
+
+Train::~Train() {
+  if (!head) return;
+
+  if (head->next == head) {
+    delete head;
+    head = nullptr;
+    return;
+  }
+
+  Car* current = head->next;
+  while (current != head) {
+    Car* temp = current;
+    current = current->next;
+    delete temp;
+  }
+
+  delete head;
+  head = nullptr;
 }
